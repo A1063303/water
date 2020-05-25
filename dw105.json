@@ -1,0 +1,73 @@
+[{
+    "public": "36.74",
+    "special": "5.33",
+    "building": "13.58",
+    "total": "55.65",
+    "date": "1月"
+},{
+    "public": "36.81",
+    "special": "5.33",
+    "building": "13.59",
+    "total": "55.73",
+    "date": "2月"
+},{
+    "public": "37.1",
+    "special": "5.35",
+    "building": "13.59",
+    "total": "56.04",
+    "date": "3月"
+},{
+    "public": "37.39",
+    "special": "5.37",
+    "building": "13.61",
+    "total": "56.37",
+    "date": "4月"
+},{
+    "public": "37.63",
+    "special": "5.36",
+    "building": "13.57",
+    "total": "56.56",
+    "date": "5月"
+},{
+    "public": "37.95",
+    "special": "5.41",
+    "building": "13.58",
+    "total": "56.94",
+    "date": "6月"
+},{
+    "public": "38.28",
+    "special": "5.42",
+    "building": "13.58",
+    "total": "57.28",
+    "date": "7月"
+},{
+    "public": "38.58",
+    "special": "5.42",
+    "building": "13.6",
+    "total": "57.61",
+    "date": "8月"
+},{
+    "public": "38.63",
+    "special": "5.4",
+    "building": "13.6",
+    "total": "57.63",
+    "date": "9月"
+},{
+    "public": "38.77",
+    "special": "5.41",
+    "building": "13.65",
+    "total": "57.83",
+    "date": "10月"
+},{
+    "public": "38.91",
+    "special": "5.42",
+    "building": "13.66",
+    "total": "58.0",
+    "date": "11月"
+},{
+    "public": "39.11",
+    "special": "5.44",
+    "building": "13.75",
+    "total": "58.29",
+    "date": "12月"
+}]

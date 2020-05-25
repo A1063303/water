@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
+
+    <title>高雄市水平台-水庫</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+      $(document).ready(function() { 
+ 
+          $(".dropdown-toggle").dropdown(); 
+          $().dropdown('toggle');
+      });
+    </script>
+    <script type="text/javascript">
+
+      
+      window.onload=function(){
+        start();
+        water();
+        a(1,text[0].percent);  
+        a(2,text[1].percent);
+        a(3,text[2].percent);    
+        animation(); 
+      }
+
+      function animation(){
+        var s1=document.getElementById("sineCanvas");
+        var s2=document.getElementById("sineCanvas2");
+        var s3=document.getElementById("sineCanvas3");
+        var o1=document.getElementById("originalpic");
+        var o2=document.getElementById("originalpic2");
+        var o3=document.getElementById("originalpic3");
+
+        s1.addEventListener("mouseover",function(){
+          s1.style.opacity=1;
+        });
+        s2.addEventListener("mouseover",function(){
+          s2.style.opacity=1;
+        });
+        s3.addEventListener("mouseover",function(){
+          s3.style.opacity=1;
+        });
+
+        s1.addEventListener("mouseout",function(){
+          s1.style.opacity=0.7;
+        })
+        s2.addEventListener("mouseout",function(){
+          s2.style.opacity=0.7;
+        })
+        s3.addEventListener("mouseout",function(){
+          s3.style.opacity=0.7;
+        })
+
+        o1.addEventListener("mouseover",function(){
+          o1.style.opacity=1;
+        });
+        o2.addEventListener("mouseover",function(){
+          o2.style.opacity=1;
+        });
+        o3.addEventListener("mouseover",function(){
+          o3.style.opacity=1;
+        });
+
+        o1.addEventListener("mouseout",function(){
+          o1.style.opacity=0.7;
+        })
+        o2.addEventListener("mouseout",function(){
+          o2.style.opacity=0.7;
+        })
+        o3.addEventListener("mouseout",function(){
+          o3.style.opacity=0.7;
+        })
+      }
+
+      //爬蟲
+      function start(){
+        var req=new XMLHttpRequest();    
+        req.open("Post","./test2.py",true);
+        req.send();  
+      }
+
+      function water(){
+        var req=new XMLHttpRequest();    
+        req.onreadystatechange=function(){
+          if(req.readyState == 4 && req.status == 200){
+            w1=document.getElementById("w1"); 
+            w2=document.getElementById("w2");
+            w3=document.getElementById("w3");
+
+            p1=document.getElementById("percent1");
+            p2=document.getElementById("percent2");
+            p3=document.getElementById("percent3");
+
+            ori=document.getElementById("originalpic");            
+            orm=document.getElementById("original_m");
+            orm3=document.getElementById("original_m3");
+            nowm=document.getElementById("now_m");
+            nowm3=document.getElementById("now_m3");
+            time1=document.getElementById("time1");
+
+            ori_2=document.getElementById("originalpic2");            
+            orm_2=document.getElementById("original2_m");
+            orm3_2=document.getElementById("original2_m3");
+            nowm_2=document.getElementById("now2_m");
+            nowm3_2=document.getElementById("now2_m3");
+            time2=document.getElementById("time2");
+
+            ori_3=document.getElementById("originalpic3");            
+            orm_3=document.getElementById("original3_m");
+            orm3_3=document.getElementById("original3_m3");
+            nowm_3=document.getElementById("now3_m");
+            nowm3_3=document.getElementById("now3_m3");
+            time3=document.getElementById("time3");
+            
+            text=JSON.parse(this.responseText);
+
+            w1.innerHTML = text[0].name; 
+            w2.innerHTML = text[1].name;   
+            w3.innerHTML = text[2].name;
+
+            p1.innerHTML += text[0].percent+"%";
+            p1.style.fontSize = "1.5em"; 
+            if(text[0].percent<30){
+              p1.style.color = "red"; 
+            }else if(text[0].percent>30 && text[0].percent<80){
+              p1.style.color = "#DAA520"; 
+            }else{
+              p1.style.color = "green"; 
+            }
+            p2.innerHTML += text[1].percent+"%";   
+            p2.style.fontSize = "1.5em"; 
+            if(text[1].percent<30){
+              p2.style.color = "red"; 
+            }else if(text[1].percent>30 && text[1].percent<80){
+              p2.style.color = "#DAA520"; 
+            }else{
+              p2.style.color = "green"; 
+            }
+            p3.innerHTML += text[2].percent+"%";  
+            p3.style.fontSize = "1.5em"; 
+            if(text[2].percent<30){
+              p3.style.color = "red"; 
+            }else if(text[2].percent>30 && text[2].percent<80){
+              p3.style.color = "#DAA520"; 
+            }else{
+              p3.style.color = "green"; 
+            }
+
+            orm.innerHTML += text[0].capacitym+"m";   
+            ori.innerHTML = text[0].capacitym3+"m<sup>3</suo>";  
+            orm3.innerHTML += text[0].capacitym3+"m<sup>3</suo>";  
+            nowm.innerHTML += text[0].nowm+"m";   
+            nowm3.innerHTML += text[0].nowm3+"m<sup>3</suo>";   
+            time1.innerHTML += text[0].time;  
+
+            orm_2.innerHTML += text[1].capacitym+"m";   
+            ori_2.innerHTML = text[1].capacitym3+"m<sup>3</suo>";  
+            orm3_2.innerHTML += text[1].capacitym3+"m<sup>3</suo>";  
+            nowm_2.innerHTML += text[1].nowm+"m";   
+            nowm3_2.innerHTML += text[1].nowm3+"m<sup>3</suo>";  
+            time2.innerHTML += text[1].time; 
+
+            orm_3.innerHTML += text[2].capacitym+"m";   
+            ori_3.innerHTML = text[2].capacitym3+"m<sup>3</suo>";  
+            orm3_3.innerHTML += text[2].capacitym3+"m<sup>3</suo>";  
+            nowm_3.innerHTML += text[2].nowm+"m";   
+            nowm3_3.innerHTML += text[2].nowm3+"m<sup>3</suo>";  
+            time3.innerHTML += text[2].time;              
+          }
+
+        };
+
+        req.open("GET","./water.json",false);
+        req.send();  
+      }
+
+
+      //水填滿canvas
+      function a(name,percent){
+        var unit = 100,
+            canvas, context, canvas2, context2,
+            height, width, xAxis, yAxis,
+            draw;
+        var percentMax = percent/100;//液體占容器的百分比
+        console.log("percentMax="+percentMax)
+        var percentMin = 0;
+        var maxHeight = 1;
+        if(percentMax>=1){
+          maxHeight = 0.95;
+        }
+        var wavePower = 3;
+
+        //初始化
+        function init() {
+          window.requestAnimFrame = (function(){
+            return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                function( callback ){
+                window.setTimeout(callback, 1000/60);
+                };
+          })();
+            
+            if(name==1){
+              canvas = document.getElementById("sineCanvas");
+            }else if(name==2){
+              canvas = document.getElementById("sineCanvas2");
+            }else{
+              canvas = document.getElementById("sineCanvas3");
+            }
+            
+            
+            canvas.width = 1000; 
+            canvas.height = 1000;
+            
+            context = canvas.getContext("2d");
+            
+            height = canvas.height;
+            width = canvas.width;
+            yAxis = 0;
+            
+            draw();          
+        }
+        function draw() {
+            
+            // 清理canvas畫板
+            context.clearRect(0, 0, width, height);
+         
+            //描繪波浪
+            if(percent>80){
+              drawWave(['#77DDFF','#0044BB'], 1, 1.5);
+            }else if(percent>30 && percent<80){
+              drawWave(['#F0E68C','#B8860B'], 1, 1.5);
+            }else{
+              drawWave(['#FFA07A','#FF4500'], 1, 1.5);
+            }
+            
+          
+          if(percentMin<=percentMax){
+              percentMin = percentMin+0.002;
+              xAxis = Math.floor(height*(maxHeight-percentMin));
+            }
+            if(percentMin>0.80){
+              if(wavePower<=36*percentMax){
+                  wavePower = wavePower+0.05
+                }
+            }
+            
+            // 更新時間然後重新繪制
+            draw.seconds = draw.seconds + .009;
+            draw.t = draw.seconds*Math.PI;
+            window.requestAnimFrame(draw);
+        };
+        draw.seconds = 0;
+        draw.t = 0;
+         
+        /**
+        * 描繪波浪
+        * drawWave([漸變左側颜色，右側颜色], 不透明度, 波浪的幅度)
+        */
+        function drawWave(color, alpha, zoom) {
+            context.globalAlpha = alpha;
+          var linearGrad = context.createLinearGradient(0, 0, width, 0);
+          linearGrad.addColorStop(0.0, color[0]);  
+            linearGrad.addColorStop(1.0, color[1]); 
+          context.fillStyle = linearGrad;
+          
+            context.beginPath(); //開始路徑
+            drawSine(draw.t / 0.5, zoom);
+            context.lineTo(width + 10, height); //路徑朝canvas右下
+            context.lineTo(0, height); //路徑朝canvas左下
+            context.closePath() //封閉路徑
+            context.fill(); //塗色
+        }
+         
+        /**
+         * 畫正弦
+         * drawSine(時間, 波浪的浮動)
+         */
+        function drawSine(t, zoom) {
+         
+            var x = t; //將時間轉換為x軸
+            var y = Math.sin(x)/zoom;
+            context.moveTo(yAxis, unit*y+xAxis); //在開始位置放置路径
+            
+            // 繪制波浪、横向幅度 
+            for (var i = yAxis; i <= width + 10; i += 10) {
+                x = t+(-yAxis+i)/unit/zoom;
+                y = Math.sin(x - 0)/wavePower;
+                context.lineTo(i, unit*y+xAxis);
+            }
+        }
+         
+        init();
+      };
+
+
+
+    </script>
+
+
+
+    <style type="text/css">
+      body{
+        background-color: #E3F0F7;
+        font-family: 微軟正黑體;
+      }
+
+      #sineCanvas, #sineCanvas2, #sineCanvas3{
+        opacity:0.7;
+        transition: opacity 0.5s;
+      }
+
+      .dropdown-menu li:hover .sub-menu {
+        visibility: visible;
+      }
+
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+           
+      #h2o{
+        font-size: 3.5em;
+        font-weight: 1000;
+        text-decoration: none;  
+        font-family: verdana;
+        color: #FFF;
+        background-color: transparent;
+      }
+
+      .carousel.slide{
+        max-height: 200px;
+      }
+
+      .carousel-inner{
+        max-height: 200px;
+      }
+
+      .carousel.slide .carousel-item img{
+        max-height: 200px;
+      }
+
+      .navbar-brand img{
+        height: 50px;
+      }
+
+      #background{
+        background: url("332.jpg");
+        background-size:cover;
+      }    
+
+      .none {
+        width: 100%;
+        padding-top: 76px;
+      }
+
+      #title{  
+        margin: 0 auto 0 auto;      
+        border-color:#DCDCDC; 
+        border-width:2px;
+        padding: 0.5% 0 0.5% 1%;
+        display: inline-block;
+        line-height: 60px;
+        letter-spacing: 20px;
+        text-decoration: none;  
+        font-weight: 600;
+        outline: 0;
+        font-size: 2.5em;
+      }
+
+      canvas#sineCanvas , canvas#sineCanvas2 , canvas#sineCanvas3{
+        margin:8% 8% 8% 8%;
+        padding:3% 3% 3% 3%;
+        border-radius: 50%;
+        width:200px;
+        height:200px;
+        overflow:hidden;
+        background:#5b5d5e;
+      }
+
+      #w1, #w2 , #w3{
+        text-align: center;
+        color: #886600;
+        font-size: 2em;
+        font-family:微軟正黑體;
+        letter-spacing: 5px;
+      }
+
+      #percent1, #percent2 , #percent3{
+        text-align: center;
+      }
+      
+      #mapid{
+        height: 400px;
+        width: 400px;
+      }
+
+      #originalpic , #originalpic2 , #originalpic3{
+        background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%); 
+        border:solid 9px #5b5d5e;
+        margin:8% auto 8% auto;
+        padding:3% 3% 3% 3%;
+        border-radius: 15px;
+        width:200px;
+        height:200px;
+        font-size: 1.5em;
+        opacity: 0.7;
+        transition: opacity 0.5s;
+      }
+
+      @media (min-width: 576px){
+        #background {
+          padding: 3rem 2rem;
+        } 
+      }
+
+      @media (max-width: 980px){
+        #h2o {
+          font-size: 2.5em;
+        } 
+      }
+    
+      @media (max-width: 380px){
+        #h2o {
+          font-size: 1.5em;
+        } 
+
+        #mapid{
+          height: 300px;
+          width: 300px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    
+      <!-- 下拉主選單 -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light position-fixed fixed-top">
+        <a class="navbar-brand" href="./ho.html">
+          <img src="./logo.png"></img>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./ho.html">首頁<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                水的產生及保存
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="#">降雨</a>
+                <a class="dropdown-item" href="./waterpool.html">水庫</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./wateruse.html">水的使用</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                水的淨化及監測
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="./dirtywater.html">汙水處理廠</a>
+                <a class="dropdown-item" href="./environment.html">環境水體監測站</a>
+                <a class="dropdown-item" href="#">地下水監測站</a>
+                <a class="dropdown-item" href="#">淨水廠</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">水資源法規</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./watercycle.html">水的永續</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./sdg.html">SDG專區</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./download.html">資料下載區</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./contact.html">聯絡我們</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="none"></div>
+
+      <!-- 背景圖 -->
+      <div class="jumbotron jumbotron-fluid" id="background">
+        <div class="container">
+          <div class="row" style="margin:0 15px 0 15px">
+
+            <div class="col-6">
+              <span class="badge badge-secondary  animated infinite flash" id="h2o" style="animation-duration: 2s;animation-iteration-count:1">H20水平台</span>
+            </div>
+
+
+            <!-- 幻燈片 -->
+            <div class="col-6">
+            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="./homepic.png" class="d-block w-100" alt="...">                    
+                </div>
+                <div class="carousel-item">
+                  <img src="./homepic2.png" class="d-block w-100" alt="...">    
+                </div>
+                <div class="carousel-item">
+                  <img src="./homepic3.png" class="d-block w-100" alt="...">
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+          </div>                    
+        </div>
+      </div>
+
+
+      <!-- 標題 -->
+
+      <div class="row text-center" style="margin:0 15px 0 15px">
+        <div class="col-12 col-xl-12 text-center">
+          <span class="badge badge-pill badge-info animated infinite fadeInUp text-center" id="title" style="animation-duration: 1s;animation-iteration-count:1">水庫
+          </span>
+        </div>
+      </div>
+
+
+      <div class="container">
+        <div class="row justify-content-center align-items-center text-center" style="margin: 5% 0 5% 0;">  
+
+          <!-- 地圖 --> 
+
+          <div class="col-xl-5 col-12 text-center">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+            <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" 
+              integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+              <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" 
+              integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+              <div id="mapid"></div>
+              <script>
+                var mymap = L.map('mapid').setView([22.712786, 120.342959], 9);     
+                //L 是 Leaflet 套件，新增了一個 map 放在 id 為 mymap 的元素上，初始緯度在 22.712786, 經度在 120.342959,9 則是縮放程度。 
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                  maxZoom: 18, 
+                  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                  '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                  'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                  id: 'mapbox.streets'
+                //載入 OSM 的地圖圖層，否則地圖會是空白的。透過 L.tileLayer 載入 OpenStreetMap 提供的地圖圖層並加到 map 上，即可顯示地圖。
+                }).addTo(mymap);
+      
+                var marker = L.marker([22.812786, 120.342959]).addTo(mymap); //加一個地標
+                marker.bindPopup("<strong>阿公店水庫</strong>"); //點選後跳出視窗
+                var marker1 = L.marker([22.709999, 120.369682]).addTo(mymap); 
+                marker1.bindPopup("<strong>觀音湖水庫</strong>"); 
+                var marker2 = L.marker([22.535315, 120.384482]).addTo(mymap);
+                marker2.bindPopup("<strong>鳳山水庫</strong>");
+                var marker3 = L.marker([22.660768, 120.353766]).addTo(mymap);
+                marker3.bindPopup("<strong>澄清湖水庫</strong>");
+                var marker4 = L.marker([22.908263, 120.554545]).addTo(mymap);
+                marker4.bindPopup("<strong>美濃湖水庫</strong>");
+              </script>
+          </div>
+
+          <!-- 阿公店水庫 -->
+
+          <div class="col-xl-7 col-12 text-center">
+            <div class="row">
+              <div class="col-xl-12 col-12 text-center font-weight-bolder">
+                <div id="w1" style="margin-bottom: 5%;"></div>
+                <div class="row">
+
+                  <div class="col-xl-6 col-12 text-center">
+                    <span style="font-size: 1.8em; color: #3CB371 ">原本 </span>水庫資訊
+                    <div class="row justify-content-center align-items-center" id="originalpic"></div>
+                    <div id="original_m">水位 (m) : </div>
+                    <div id="original_m3">水庫容量 (萬立方公尺) : </div>
+                  </div>
+
+                  <div class="col-xl-6 col-12 text-center">
+                    <span style="font-size: 1.8em; color: #FF4500 ">目前 </span>水庫資訊
+                    <canvas id="sineCanvas"></canvas>
+                    <div id="percent1" style="margin-top:-5%;">有效容量比 : </div>                   
+                    <div id="now_m">水位 (m) : </div>
+                    <div id="now_m3">水庫容量 (萬立方公尺) : </div>
+                    <div id="time1">更新時間 : </div>
+                  </div>
+
+                </div>               
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 澄清湖水庫 -->
+
+        <div class="row">
+          <div class="col-xl-6 col-12 text-center font-weight-bolder">
+            <div id="w2" style="margin-bottom: 5%;"></div>
+              <div class="row">
+
+                <div class="col-xl-6 col-12 text-center">
+                  <span style="font-size: 1.8em; color: #3CB371 ">原本 </span>水庫資訊
+                  <div class="row justify-content-center align-items-center" id="originalpic2"></div>
+                  <div id="original2_m">水位 (m) : </div>
+                  <div id="original2_m3">水庫容量 (萬立方公尺) : </div>
+                </div>
+
+                <div class="col-xl-6 col-12 text-center">
+                  <span style="font-size: 1.8em; color: #FF4500 ">目前 </span>水庫資訊
+                  <canvas id="sineCanvas2"></canvas>
+                  <div id="percent2" style="margin-top:-5%;">有效容量比 : </div>
+                  <div id="now2_m">水位 (m) : </div>
+                  <div id="now2_m3">水庫容量 (萬立方公尺) : </div>
+                  <div id="time2">更新時間 : </div>
+                </div>
+
+              </div>  
+          </div>
+
+          <!-- 鳳山水庫 -->
+
+          <div class="col-xl-6 col-12 text-center font-weight-bolder">
+            <div id="w3" style="margin-bottom: 5%;"></div>
+              <div class="row">
+
+                <div class="col-xl-6 col-12 text-center">
+                  <span style="font-size: 1.8em; color: #3CB371 ">原本 </span>水庫資訊
+                  <div class="row justify-content-center align-items-center" id="originalpic3"></div>
+                  <div id="original3_m">水位 (m) : </div>
+                  <div id="original3_m3">水庫容量 (萬立方公尺) : </div>
+                </div>
+
+                <div class="col-xl-6 col-12 text-center">
+                  <span style="font-size: 1.8em; color: #FF4500 ">目前 </span>水庫資訊
+                  <canvas id="sineCanvas3"></canvas>
+                  <div id="percent3" style="margin-top:-5%;">有效容量比 : </div>
+                  <div id="now3_m">水位 (m) : </div>
+                  <div id="now3_m3">水庫容量 (萬立方公尺) : </div>
+                  <div id="time3">更新時間 : </div>
+                </div>
+
+              </div>  
+          </div>     
+        </div> 
+
+
+        <!-- 水庫水質查詢標題 -->
+
+        <div class="row" style="margin:5% 15px 5% 15px">
+          <div class="col-12 col-xl-12 text-center">
+            <span class="badge badge-pill badge-info animated infinite fadeInUp text-center" id="title" style="animation-duration: 1s;animation-iteration-count:1">水質查詢
+            </span>
+          </div>
+        </div>
+
+        <!-- 水庫水質專區 -->
+          
+<!--         <div class="row" style="margin-bottom: 20%;">
+          <div class="col-xl-5">
+
+            <div class="row">
+              <div class="col-xl-7 col-12">
+                <div class="btn-group dropright">
+                  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    選擇水庫
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button" id="a1">阿公店水庫</button>
+                    <button class="dropdown-item" type="button" id="a1">鳳山水庫</button>
+                    <button class="dropdown-item" type="button" id="a1">澄清湖水庫</button>
+                  </div>
+                </div>  
+              </div>
+
+              <div class="col-xl-5 col-12">
+                <div class="btn-group dropright">
+                  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    選擇時間
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button" id="s1">108</button>
+                    <button class="dropdown-item" type="button" id="s2">107</button>
+                    <button class="dropdown-item" type="button" id="s3">106</button>
+                    <button class="dropdown-item" type="button" id="s4">105</button>
+                    <button class="dropdown-item" type="button" id="s5">104</button>
+                    <button class="dropdown-item" type="button" id="s6">103</button>
+                    <button class="dropdown-item" type="button" id="s7">102</button>
+                    <button class="dropdown-item" type="button" id="s8">101</button>
+                    <button class="dropdown-item" type="button" id="s9">100</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                 
+          <div class="col-xl-7">
+            <table id=”table” border=”1″>
+              <caption>CSV轉JSON</caption>
+              <thead>
+                  <tr>
+                      <th>Vehicle</th>
+                      <th>Date</th>
+                      <th>Location</th>
+                      <th>Speed</th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          
+        </div> -->
+      </div>
+      
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  </body>
+</html>

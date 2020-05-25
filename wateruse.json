@@ -1,0 +1,65 @@
+[{
+    "year": "100",
+    "Adperson": "2774470",
+    "waterperson": "2644264",
+    "lifewater": "348007.63",
+    "industrywater": "244138.93",
+    "total": "592146.56",
+    "rate": "95.31"
+},{
+    "year": "101",
+    "Adperson": "2778659",
+    "waterperson": "2651087",
+    "lifewater": "351173.62",
+    "industrywater": "237674.65",
+    "total": "588848.27",
+    "rate": "95.41"
+},{
+    "year": "102",
+    "Adperson": "2779877",
+    "waterperson": "2654361",
+    "lifewater": "346875.08",
+    "industrywater": "231270.07",
+    "total": "578145.15",
+    "rate": "95.48"
+},{
+    "year": "103",
+    "Adperson": "2778992",
+    "waterperson": "2657021",
+    "lifewater": "351925.34",
+    "industrywater": "236922.93",
+    "total": "588848.27",
+    "rate": "95.61"
+},{
+    "year": "104",
+    "Adperson": "2778918",
+    "waterperson": "2659515",
+    "lifewater": "342189.09",
+    "industrywater": "229583.25",
+    "total": "571772.34",
+    "rate": "95.7"
+},{
+    "year": "105",
+    "Adperson": "2779371",
+    "waterperson": "2663024",
+    "lifewater": "343671.67",
+    "industrywater": "227550.88",
+    "total": "571222.55",
+    "rate": "95.81"
+},{
+    "year": "106",
+    "Adperson": "2776912",
+    "waterperson": "2663643",
+    "lifewater": "342329.16",
+    "industrywater": "236923.04",
+    "total": "579252.2",
+    "rate": "95.92"
+},{
+    "year": "107",
+    "Adperson": "2773533",
+    "waterperson": "2664814",
+    "lifewater": "345313.71",
+    "industrywater": "222703.55",
+    "total": "568017.26",
+    "rate": "96.08"
+}]

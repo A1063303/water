@@ -1,0 +1,25 @@
+[{
+    "name": "阿公店水庫",
+    "capacitym": "37",
+    "capacitym3": "1523",
+    "nowm": "32.77",
+    "nowm3": "483",
+    "percent": "31.71",
+    "time": "11:00"
+},{
+    "name": "澄清湖水庫",
+    "capacitym": "17.8",
+    "capacitym3": "263",
+    "nowm": "17.61",
+    "nowm3": "242",
+    "percent": "92.02",
+    "time": "07:00"
+},{
+    "name": "鳳山水庫",
+    "capacitym": "50",
+    "capacitym3": "716",
+    "nowm": "43.34",
+    "nowm3": "314",
+    "percent": "43.87",
+    "time": "07:00"
+}]

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
+
+    <title>Hello, world!</title>
+  </head>
+
+  <script type="text/javascript">
+    window.onload=function(){  
+      wid = document.getElementsByTagName("Body")[0];
+      window.count=1;
+      window.count2=1;
+      window.x=0;
+      water();
+      setTimeout(function(){
+        window.setInterval(fish,200);}, 1500);      
+    }
+
+
+    //欄位點擊跑出子連結
+
+    function produce(name){
+      if(name=="produce"){
+        var text1=document.getElementById("picshow1");
+        if(count%2!=0){
+        text1.innerHTML = '<div class="row justify-content-center align-items-center"><div class="col-xl-12" style=""><div class="row justify-content-center align-items-center" style="font-size: 1.5em; font-family:微軟正黑體; font-weight: 600;"><div class="col-xl-6" style=""><a href="">'+"降雨"+'</a></div>'+'<div class="col-xl-6"><a href="./waterpool.html">'+"水庫"+'</a></div></div></div>';
+          count=2;
+        }else{
+          text1.innerHTML = '<div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;"><div class="col-xl-6 col-6 text-center"><img src="./a.png" class="img-fluid" alt="Responsive image"></div><div class="col-xl-6 col-6 text-center"><img src="./b.png" class="img-fluid" id="clickchange2" alt="Responsive image"></div></div>';
+          count=1;
+        }
+      }
+      
+      if(name=="clean"){
+        var text2=document.getElementById("picshow2");
+        if(count2%2!=0){
+        text2.innerHTML = '<div class="row justify-content-center align-items-center" style="font-size: 1.2em; font-family: 微軟正黑體; font-weight: 600; width: 100%;"><div class="col-xl-6"><a href="dirtywater.html">'+"汙水"+'</br>'+"處理廠"+'</a></div>'+'<div class="col-xl-6"><a href="./environment.html">'+"環境水體"+'</br>'+"監測站"+'</a></div></div>'+'<div class="row justify-content-center align-items-center" style="font-size: 1.2em; font-family:微軟正黑體; font-weight: 600; margin-top: 7.5%; width: 100%;"><div class="col-xl-6" style=""><a href="")>'+"地下水"+'</br>'+"監測站"+'</a></div>'+'<div class="col-xl-6"><a href="./waterpool.html">'+"淨水廠"+'</a></div></div>';
+          count2=2;
+        }else{
+          text2.innerHTML = '<div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;"><div class="col-xl-6 col-6 text-center"><img src="./a.png" class="img-fluid" alt="Responsive image"></div><div class="col-xl-6 col-6 text-center"><img src="./b.png" class="img-fluid" id="clickchange2" alt="Responsive image"></div></div>';
+          count2=1;
+        }
+      }   
+    }
+
+
+    //水填滿canvas
+
+      function water(){
+        var unit = 100,
+            canvas, context, canvas2, context2,
+            height, width, xAxis, yAxis,
+            draw;
+        var percentMax = 100;//液體占容器的百分比
+        var percentMin = 0;
+        var maxHeight = 1;
+        if(percentMax>=1){
+          maxHeight = 0.95;
+        }
+        var wavePower = 3;
+
+        //初始化
+        function init() {
+          window.requestAnimFrame = (function(){
+            return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                function( callback ){
+                window.setTimeout(callback, 10/10);
+                };
+          })();
+            
+            canvas = document.getElementById("sineCanvas");
+            wid = document.getElementsByTagName("Body")[0];
+
+            canvas.width = wid.clientWidth; 
+            canvas.height = wid.clientHeight;
+            
+            context = canvas.getContext("2d");
+            
+            height = canvas.height;
+            width = canvas.width;
+            yAxis = 0;
+            
+            draw();          
+        }
+        function draw() {
+            
+            // 清理canvas畫板
+            context.clearRect(0, 0, width, height);
+         
+            //描繪波浪            
+            drawWave(['#77DDFF','#0044BB'], 1, 1.5);
+
+          if(percentMin<=percentMax){
+              percentMin = percentMin+0.009;
+              xAxis = Math.floor(height*(maxHeight-percentMin));
+            }
+            if(percentMin>0.80){
+              if(wavePower<=36*percentMax){
+                  wavePower = wavePower+0.05
+                }
+            }
+            
+            // 更新時間然後重新繪制
+            draw.seconds = draw.seconds + .009;
+            draw.t = draw.seconds*Math.PI;
+            window.requestAnimFrame(draw);
+        };
+        draw.seconds = 0;
+        draw.t = 0;
+         
+        /**
+        * 描繪波浪
+        * drawWave([漸變左側颜色，右側颜色], 不透明度, 波浪的幅度)
+        */
+        function drawWave(color, alpha, zoom) {
+            context.globalAlpha = alpha;
+          var linearGrad = context.createLinearGradient(0, 0, width, 0);
+          linearGrad.addColorStop(0.0, color[0]);  
+            linearGrad.addColorStop(1.0, color[1]); 
+          context.fillStyle = linearGrad;
+          
+            context.beginPath(); //開始路徑
+            drawSine(draw.t / 0.3, zoom);
+            context.lineTo(width + 10, height); //路徑朝canvas右下
+            context.lineTo(0, height); //路徑朝canvas左下
+            context.closePath() //封閉路徑
+            context.fill(); //塗色
+        }
+         
+        /**
+         * 畫正弦
+         * drawSine(時間, 波浪的浮動)
+         */
+        function drawSine(t, zoom) {
+         
+            var x = t; //將時間轉換為x軸
+            var y = Math.sin(x)/zoom;
+            context.moveTo(yAxis, unit*y+xAxis); //在開始位置放置路径
+            
+            // 繪制波浪、横向幅度 
+            for (var i = yAxis; i <= width + 10; i += 10) {
+                x = t+(-yAxis+i)/unit/zoom;
+                y = Math.sin(x - 0)/wavePower;
+                context.lineTo(i, unit*y+xAxis);
+            }
+        }
+         
+        init();
+      };
+
+
+      //魚動畫
+
+      function fish(){
+        var pic=document.getElementById("fish1");
+        var pic2=document.getElementById("fish2");
+        var pic3=document.getElementById("fish3");
+        pic.style.display= "block";
+        pic.classList.add("animated");
+        pic.classList.add("fadeIn");
+        setTimeout(function(){wid = document.getElementsByTagName("Body")[0];
+          pic2.style.display= "block";
+          pic2.classList.add("animated");
+          pic2.classList.add("fadeIn");},300);
+
+        setTimeout(function(){wid = document.getElementsByTagName("Body")[0];
+          pic3.style.display= "block";
+          pic3.classList.add("animated");
+          pic3.classList.add("fadeIn");},500);
+             
+        setTimeout(function(){wid = document.getElementsByTagName("Body")[0];
+          pic.style.right = (x+100)+"px";
+          pic2.style.right = (x+45)+"px";
+          pic3.style.right = x+"px";
+          x=x+10;
+          if(x>=wid.clientWidth){
+            x=0;
+          }else{
+            x=x+10;
+          }},1000);
+      }
+
+  </script>
+
+  <style type="text/css">
+    body{
+      font-family: 微軟正黑體;
+    }
+
+    canvas{
+      position: absolute;
+      z-index: -2;
+    }
+
+    #column{
+      background-color: #fff;
+      padding: 2% 2% 2% 2%;
+      border-radius: 10px;
+      margin: 0 0.5% 0 0.5%;
+      height: 200px;
+      width: 100%;
+      opacity: 0.6;
+    }  
+
+    .col-xl-3.a{
+      padding-right: 0;
+    }
+
+    .word{
+      margin-top: 10%;
+      color: black;
+      text-align: center;
+      font-size: 1.6em;
+      font-weight: 800;
+    }
+  
+    #title{
+      font-size: 2.5em;
+      font-weight: 1000;
+      text-decoration: none;  
+      font-family: verdana;
+      color: #FFF;
+      background-color: transparent;
+    }
+
+    #column:hover{
+      background-color: #f8f9fa;
+      opacity: 1;
+    }
+
+    #fish1{
+        right:100px; 
+        top:40px; 
+        position: absolute;
+        display: none;
+        z-index: -2;
+    }
+
+    #fish2{
+        right:45px; 
+        top:60px; 
+        position: absolute;
+        display: none;
+        z-index: -2;
+    }
+
+    #fish3{
+        right:0; 
+        top:60px; 
+        position: absolute;
+        display: none;
+        z-index: -2;
+    }
+
+    #b1, #b2, #b3, #b4, #b5, #b6, #b7, #b8, #b9, #b10, #b11, #b12{ 
+        /*position: absolute;*/
+        display: block;
+        z-index: -2;
+    }
+
+    .bubble{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      /*z-index defult value=1*/
+      z-index:-2;
+      /*upgrade gpu rendering*/
+      transform:translateZ(0);
+    }
+
+    .bubble li{
+      position:absolute;
+      list-style:none;
+      display:block;
+      background:rgba(255,255,255,0.2);
+      /*make bubble on page bottom*/
+      bottom:0px; 
+      animation:bubble-ani 20s linear infinite;
+      border-radius:100%;
+    }
+
+    /* glow of the bubbles*/
+
+    .bubble li:before {
+      position: absolute;
+      left: 20%;
+      top: 21%;
+      width: 25%;
+      content: '';
+      background: rgba(255,255,255,0.2);
+      display: block;
+      height: 25%;
+      border-radius: 100%;
+    }
+
+    .bubble li:nth-child(1){
+      width:20px;
+      height:20px;
+      left:15%;
+    }
+
+    .bubble li:nth-child(2){
+      width:40px;
+      height:40px;
+      left:40%;
+      animation-duration:13s;
+    }
+
+    .bubble li:nth-child(3){
+      width:25px;
+      height:25px;
+      left:30%;
+      animation-duration:18s;
+    }
+
+    .bubble li:nth-child(4){
+      width:60px;
+      height:60px;
+      left:55%;
+      animation-duration:23s;
+    }
+
+    .bubble li:nth-child(5){
+      width:20px;
+      height:20px;
+      left:70%;
+      animation-duration:16s;
+    }
+
+    .bubble li:nth-child(6){
+      width:50px;
+      height:50px;
+      left:80%;
+      animation-duration:30s;
+    }
+
+    .bubble li:nth-child(7){
+      width:10px;
+      height:10px;
+      left:85%;
+      animation-duration:16s;
+    }
+
+    .bubble li:nth-child(8){
+      width:30px;
+      height:30px;
+      left:90%;
+      animation-duration:10s;
+    }
+
+    .bubble li:nth-child(9){
+      width:25px;
+      height:25px;
+      left:95%;
+      animation-duration:20s;
+    }
+
+    .bubble li:nth-child(10){
+      width:40px;
+      height:40px;
+      left:5%;
+      animation-duration:8s;
+    }
+
+    @keyframes bubble-ani {
+      0%{
+        -webkit-transform:translateY(0);
+        transform:translateY(0);
+      }
+      100%{
+        -webkit-transform:translateY(-1080px);
+        transform:translateY(-1080px);
+      }
+    }
+
+    @media (max-width: 1600px){
+        #pic,#picshow1,#picshow2 {
+          height: 107px;
+        } 
+    }
+
+    @media (max-width: 380px){
+        .word{
+          color: black;
+          text-align: center;
+          font-size: 1.2em;
+          font-weight: 800;
+        }
+        .col-xl-3.b{
+          padding-right: 0;
+          margin-bottom: 2%;
+        }
+        .col-xl-3.a{
+          margin-bottom: 2%;
+        }
+        #phonemargin{
+          padding-left: 0;
+        }
+    }
+    /*@media (max-width: 1200px){
+        #column{
+          background-color: #fff;
+          padding: 2% 2% 2% 2%;
+          border-radius: 10px;
+          margin: 0 0.5% 0 0.5%;
+          height: 400px;
+          width: 100%;
+          opacity: 0.6;
+        }   
+    }*/
+  </style>
+
+  <body style="background-color: #444444;">
+
+    <canvas id="sineCanvas"></canvas>
+    
+    <div class="row justify-content-center align-items-center" style="margin:0 15px 0 15px">
+      <div class="col-xl-12 col-12" id="phonemargin">
+        <div>
+          <div class="d-flex flex-row bd-highlight mb-3" style="color:white; margin-top: 3%">    
+            <div class="p-2 bd-highlight"><img src="./logo1.png" alt=""></div>     
+            <div class="p-2 bd-highlight" id="title">H20水平台</div>
+              <div class="p-2 bd-highlight" id="fish1"><img src="./fish1.png" alt=""></div>
+              <div class="p-2 bd-highlight" id="fish2"><img src="./fish2.png" alt=""></div>
+              <div class="p-2 bd-highlight" id="fish3"><img src="./fish3.png" alt=""></div>
+          </div>
+        </div>
+        
+        <div class="up" style="height:30%; margin: 2% 2% 0 2%;">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-xl-3 a col-6">
+              <a type="button" class="btn btn-light a" id="column" onclick="produce('produce')">
+                <div class="row justify-content-center align-items-center" id="picshow1" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-6 col-6 text-center">
+                    <img src="./a.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                  <div class="col-xl-6 col-6 text-center">
+                    <img src="./b.png" class="img-fluid" id="clickchange2" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">水的產生及保存</div>
+              </a>               
+            </div>
+
+            <div class="col-xl-3 a col-6">
+              <a type="button" class="btn btn-light" id="column" href="./wateruse.html">
+                <div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./c.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">水的使用</div>
+              </a>               
+            </div>
+
+            <div class="col-xl-3 a col-6">
+              <a type="button" class="btn btn-light b" id="column" onclick="produce('clean')">
+                <div class="row justify-content-center align-items-center" id="picshow2" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./d.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">水的淨化及監測</div>
+              </a>
+            </div>
+
+            <div class="col-xl-3 b col-6">
+              <a type="button" class="btn btn-light" id="column" href="">
+                <div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./e.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">水資源法規</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="down" style="height:30%; margin: 1% 2% 2% 2%;">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-xl-3 a col-6">
+              <a type="button" class="btn btn-light" id="column" href="./download.html">
+                <div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./f.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">資料下載區</div>
+              </a>               
+            </div>
+
+            <div class="col-xl-3 a col-6">
+              <a type="button" class="btn btn-light" id="column" href="./contact.html">
+                <div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./g.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">聯絡我們</div>
+              </a>               
+            </div>
+
+            <div class="col-xl-3 a col-6">
+              <a type="button" class="btn btn-light" id="column" href="./watercycle.html">
+                <div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./h.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">水的永續</div>
+              </a>
+            </div>
+
+            <div class="col-xl-3 b col-6">
+              <a type="button" class="btn btn-light" id="column" href="./sdg.html">
+                <div class="row justify-content-center align-items-center" id="pic" style="padding: 0 4% 0 4%; margin: 5% 0 6% 0;">
+                  <div class="col-xl-12 col-6 text-center">
+                    <img src="./i.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                </div>
+                <div class="word">SDG</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 泡泡 -->
+        <div>
+          <ul class="bubble" style="margin-bottom: 0;">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+        </div> 
+      </div>      
+    </div>
+    
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

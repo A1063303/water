@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
+    
+
+    <title>高雄市水平台-汙水處理廠</title>
+
+    <script type="text/javascript">
+
+      window.onload=function(){
+        dirtywater();
+        // $("#tip1").mouseover(function(){
+        //   $("#tip1").tooltip('show');
+        // });
+        // $("#tip2").mouseover(function(){
+        //   $("#tip2").tooltip('show');
+        // });
+        // $("#tip3").mouseover(function(){
+        //   $("#tip3").tooltip('show');
+        // });
+        // $("#tip4").mouseover(function(){
+        //   $("#tip4").tooltip('show');
+        // });
+        // $("#tip5").mouseover(function(){
+        //   $("#tip5").tooltip('show');
+        // });
+        // $("#tip6").mouseover(function(){
+        //   $("#tip6").tooltip('show');
+        // });      
+      }  
+
+      // 汙水處理廠資訊
+      function dirtywater(){
+        var req=new XMLHttpRequest();
+        req.onreadystatechange=function(){
+          if(req.readyState == 4 && req.status == 200){
+            var name1=document.getElementById("n1");
+            var name2=document.getElementById("n2");
+            var name3=document.getElementById("n3");
+            var name4=document.getElementById("n4");
+            var name5=document.getElementById("n5");
+
+            var xl1=document.getElementById("xl1");
+            var xl2=document.getElementById("xl2");
+            var xl3=document.getElementById("xl3");
+            var xl4=document.getElementById("xl4");
+            var xl5=document.getElementById("xl5");
+
+            var lev1=document.getElementById("lev1");
+            var lev2=document.getElementById("lev2");
+            var lev3=document.getElementById("lev3");
+            var lev4=document.getElementById("lev4");
+            var lev5=document.getElementById("lev5");
+
+            var text=JSON.parse(this.responseText);
+            name1.innerHTML=text[0].廠區;
+            name2.innerHTML=text[1].廠區;
+            name3.innerHTML=text[2].廠區;
+            name4.innerHTML=text[3].廠區;
+            name5.innerHTML=text[4].廠區;
+
+            xl1.innerHTML=text[0].平均噸數;
+            xl2.innerHTML=text[1].平均噸數;
+            xl3.innerHTML=text[2].平均噸數;
+            xl4.innerHTML=text[3].平均噸數;
+            xl5.innerHTML=text[4].平均噸數;
+
+            lev1.innerHTML=text[0].處理等級;
+            lev2.innerHTML=text[1].處理等級;
+            lev3.innerHTML=text[2].處理等級;
+            lev4.innerHTML=text[3].處理等級;
+            lev5.innerHTML=text[4].處理等級;
+          }         
+        }
+        req.open("GET","./dirtywater.json",true);
+        req.send();
+      }
+    </script>
+
+    <script>
+
+    // 圖表
+    function monthchart(filename,type){
+      var name;
+      var data=[];
+      var label=[];
+      var chartname;
+      var req = new XMLHttpRequest();     
+      req.onreadystatechange = function(){
+
+        if(req.readyState == 4 && req.status == 200){         
+          var chart=document.getElementById("chart");
+          var ctx = document.getElementById("chart").getContext('2d');
+          var text=JSON.parse(this.responseText);
+
+          for(i=0;i<=11;i++){
+            label.push(text[i].date)            
+          } 
+          console.log(label);
+          if(type=="public"){
+            var ymin=text[0].public;
+            var ymax=0;
+            console.log("count="+text.length);
+            data.length = 0;
+            for(i=0;i<text.length;i++){          
+              data.push(text[i].public);
+              chartname="公共污水下水道普及率";
+
+              if(ymin>data[i]){
+                ymin=data[i]
+              }
+              if(ymax<data[i]){
+                ymax=data[i]
+              }
+            }  
+            console.log("min="+ymin)
+            console.log("max="+ymax)         
+          }
+          if(type=="special"){
+            var ymin=text[0].special;
+            var ymax=0;
+            data.length = 0;
+            for(i=0;i<text.length;i++){              
+              data.push(text[i].special)
+              chartname="專用污水下水道普及率";
+
+              if(ymin>data[i]){
+                ymin=data[i]
+              }
+              if(ymax<data[i]){
+                ymax=data[i]
+              }
+            }           
+            console.log("min="+ymin)
+            console.log("max="+ymax)
+          }
+          if(type=="building"){
+            var ymin=text[0].building;
+            var ymax=0;
+            data.length = 0;
+            for(i=0;i<text.length;i++){             
+              data.push(text[i].building)
+              chartname="建築物污水設施普及率";
+
+              if(ymin>data[i]){
+                ymin=data[i]
+              }
+              if(ymax<data[i]){
+                ymax=data[i]
+              }
+            }  
+            console.log("min="+ymin)
+            console.log("max="+ymax)         
+          }
+          if(type=="total"){
+            var ymin=text[0].total;
+            var ymax=0;
+
+            data.length = 0;
+            for(i=0;i<text.length;i++){             
+              data.push(text[i].total)
+              chartname="整體污水處理率合計";
+
+
+              if(ymin>data[i]){
+                ymin=data[i]
+              }
+              if(ymax<data[i]){
+                ymax=data[i]
+              }
+            }  
+            console.log("min="+ymin)
+            console.log("max="+ymax)         
+          }
+          
+          if(type!="mix"){
+            console.log("else"+text[0].public);
+            chart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: [label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9], label[10], label[11]],
+                  datasets: [{
+                      label: '普及率(%)',
+                      data: [data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11]],
+                      fill: false,
+                      backgroundColor: 'rgba(212, 106, 106, 1)',
+                      borderColor: 'rgba(212, 106, 106, 1)'
+                  }]                  
+              },
+              options: {
+                title: {
+                    display: true,
+                    text: chartname,
+                },
+                scales: {
+                    yAxes: [{
+                        min:ymin,
+                        max:ymax,
+                        // ticks: {
+                        //     beginAtZero:true
+                        // },
+                        scaleLabel: {
+                          display: true,
+                          labelString: '普及率(%)'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: '月份'
+                        }
+                    }]
+                  }
+                }              
+              });   
+            }
+          }
+          
+
+          if(type=="mix"){
+            //console.log("mix"+text[0].public);
+            chart = new Chart(ctx, {
+            type: 'line',
+
+            data: {        
+                labels: [label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9], label[10], label[11]],          
+                datasets: [{
+                    label: ['公共污水下水道普及率(%)'],
+                    data: [text[0].public, text[1].public, text[2].public, text[3].public, text[4].public, text[5].public, text[6].public, text[7].public, text[8].public, text[9].public, text[10].public, text[11].public],
+                    fill: false,
+                    backgroundColor: '#DDAA00',
+                    borderColor: '#DDAA00'
+                },
+
+                {
+                    label: ['專用污水下水道普及率(%)'],
+                    data: [text[0].special, text[1].special, text[2].special, text[3].special, text[4].special, text[5].special, text[6].special, text[7].special, text[8].special, text[9].special, text[10].special, text[11].special],
+                    fill: false,
+                    backgroundColor: 'plum',
+                    borderColor: 'plum'
+                },
+
+                {
+                    label: ['建築物污水設施普及率(%)'],
+                    data: [text[0].building, text[1].building, text[2].building, text[3].building, text[4].building, text[5].building, text[6].building, text[7].building, text[8].building, text[9].building, text[10].building, text[11].building],
+                    fill: false,
+                    backgroundColor: ' #00DDDD',
+                    borderColor: '#00DDDD'
+                },
+
+                { 
+                    label: ['整體污水處理率合計(%)'],
+                    data: [text[0].total, text[1].total, text[2].total, text[3].total, text[4].total, text[5].total, text[6].total, text[7].total, text[8].total, text[9].total, text[10].total, text[11].total],
+                    fill: false,
+                    backgroundColor: '#00DD00',
+                    borderColor: '#00DD00'
+                }]              
+            },
+            options: {
+              title: {
+                  display: true,
+                  text: '綜合圖表'
+              },
+              scales: {
+                  yAxes: [{
+                      // min:10,
+                      // max:70,
+                      // interval:5,
+                      ticks: {
+                          beginAtZero:true
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: '普及率(%)'
+                      }
+                  }],
+                  xAxes: [{
+                      ticks: {
+                          beginAtZero:true
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: '月份'
+                      }
+                  }]
+              }
+            }              
+          });           
+        }         
+      }      
+      console.log(filename);
+      req.open("GET", filename, true);
+      req.send(); 
+      $("canvas#chart").remove();
+      $("div#chartreport").append('<canvas id="chart" width="640" height="500"></canvas>');    
+    }
+
+    function yearchart(filename,type){
+      var name;
+      var data=[];
+      var label=[];
+      var chartname;
+      var req = new XMLHttpRequest();     
+      req.onreadystatechange = function(){
+
+        if(req.readyState == 4 && req.status == 200){         
+          var chart=document.getElementById("chart");
+          var ctx = document.getElementById("chart").getContext('2d');
+          var text=JSON.parse(this.responseText);
+
+          console.log("count="+text.length);
+          for(i=0;i<text.length;i++){
+            label.push(text[i].year)            
+          } 
+          console.log(label);
+          if(type=="pyear"){
+            data.length = 0;
+            for(i=0;i<text.length;i++){             
+              data.push(text[i].publicavg);
+              chartname="公共污水下水道普及率";
+            }           
+          }
+          if(type=="syear"){
+            data.length = 0;
+            for(i=0;i<text.length;i++){              
+              data.push(text[i].specialavg)
+              chartname="專用污水下水道普及率";
+            }           
+          }
+          if(type=="byear"){
+            data.length = 0;
+            for(i=0;i<text.length;i++){             
+              data.push(text[i].buildingavg)
+              chartname="建築物污水設施普及率";
+            }           
+          }
+          if(type=="tyear"){
+            data.length = 0;
+            for(i=0;i<text.length;i++){             
+              data.push(text[i].totalavg)
+              chartname="整體污水處理率合計";
+            }           
+          }
+          
+          
+          if(type!="myear"){
+            chart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: [label[0], label[1], label[2], label[3], label[4]],
+                  datasets: [{
+                      label: '普及率(%)',
+                      data: [data[0], data[1], data[2], data[3], data[4]],
+                      fill: false,
+                      backgroundColor: 'rgba(212, 106, 106, 1)',
+                      borderColor: 'rgba(212, 106, 106, 1)'
+                  }]                  
+              },
+              options: {
+                title: {
+                    display: true,
+                    text: chartname,
+                },
+                scales: {
+                    yAxes: [{                       
+                        ticks: {
+                            beginAtZero:true
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: '普及率(%)'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: '年份'
+                        }
+                    }]
+                  }
+                }              
+              });   
+            }
+          }
+          
+
+          if(type=="myear"){
+            chart = new Chart(ctx, {
+            type: 'line',
+
+            data: {        
+                labels: [label[0], label[1], label[2], label[3], label[4]],          
+                datasets: [{
+                    label: ['公共污水下水道普及率(%)'],
+                    data: [text[0].publicavg, text[1].publicavg, text[2].publicavg, text[3].publicavg, text[4].publicavg],
+                    fill: false,
+                    backgroundColor: '#DDAA00',
+                    borderColor: '#DDAA00'
+                },
+
+                {
+                    label: ['專用污水下水道普及率(%)'],
+                    data: [text[0].specialavg, text[1].specialavg, text[2].specialavg, text[3].specialavg, text[4].specialavg],
+                    fill: false,
+                    backgroundColor: 'plum',
+                    borderColor: 'plum'
+                },
+
+                {
+                    label: ['建築物污水設施普及率(%)'],
+                    data: [text[0].buildingavg, text[1].buildingavg, text[2].buildingavg, text[3].buildingavg, text[4].buildingavg],
+                    fill: false,
+                    backgroundColor: ' #00DDDD',
+                    borderColor: '#00DDDD'
+                },
+
+                { 
+                    label: ['整體污水處理率合計(%)'],
+                    data: [text[0].totalavg, text[1].totalavg, text[2].totalavg, text[3].totalavg, text[4].totalavg],
+                    fill: false,
+                    backgroundColor: '#00DD00',
+                    borderColor: '#00DD00'
+                }]              
+            },
+            options: {
+              title: {
+                  display: true,
+                  text: '綜合圖表'
+              },
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero:true
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: '普及率(%)'
+                      }
+                  }],
+                  xAxes: [{
+                      ticks: {
+                          beginAtZero:true
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: '年份'
+                      }
+                  }]
+              }
+            }              
+          });           
+        }        
+      }      
+      console.log(filename);
+      req.open("GET", filename, true);
+      req.send(); 
+      $("canvas#chart").remove();
+      $("div#chartreport").append('<canvas id="chart" width="640" height="500"></canvas>');    
+    }
+    </script>
+
+
+    <style type="text/css">  
+      /*#annotation1, #annotation2, #annotation3, #annotation4, #annotation5, #annotation6{
+        background-color: white;
+        border-color: white;
+        color: #0645ad;
+        font-weight: 600;
+      }*/
+
+      body{
+        background-color: #E3F0F7;
+        font-family: 微軟正黑體;
+      }
+
+      td, th{
+        text-align: center;
+      }
+
+      .dropdown-menu li:hover .sub-menu {
+        visibility: visible;
+      }
+
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+
+      #h2o{
+        font-size: 3.5em;
+        font-weight: 1000;
+        text-decoration: none;  
+        font-family: verdana;
+        color: #FFF;
+        background-color: transparent;
+      }
+
+      .carousel.slide{
+        max-height: 200px;
+      }
+
+      .carousel-inner{
+        max-height: 200px;
+      }
+
+      .carousel.slide .carousel-item img{
+        max-height: 200px;
+      }
+
+      .navbar-brand img{
+        height: 50px;
+      }
+
+      #background{
+        background: url("332.jpg");
+        background-size:cover;
+      }
+
+      .none {
+        width: 100%;
+        padding-top: 76px;
+      }   
+
+      #title{  
+        margin: 0 auto 0 auto;      
+        border-color:#DCDCDC; 
+        border-width:2px;
+        padding: 0.5% 0 0.5% 1%;
+        display: inline-block;
+        line-height: 60px;
+        letter-spacing: 20px;
+        text-decoration: none;  
+        font-weight: 600;
+        outline: 0;
+        font-size: 2.5em;
+      }   
+
+      #process2{
+        font-size: 1.2em; 
+        background-color: #32CD32; 
+        border-color: #32CD32;"
+      }  
+      
+      #process3{
+        font-size: 1.2em;
+        background-color: #DAA520; 
+        border-color: #DAA520;"
+      }
+
+      #process2:hover {
+        background-color: #228B22;
+        border-color: #228B22; 
+      }
+
+      #process3:hover {
+        background-color: #B8860B;
+        border-color: #B8860B; 
+      }
+
+      #mapid{
+        height: 400px;
+        width: 400px;
+      }
+
+      #chart{
+        width: 640px;
+        height: 500px;
+      }
+
+      @media (min-width: 576px){
+        #background {
+          padding: 3rem 2rem;
+        } 
+      }
+
+      @media (max-width: 980px){
+        #h2o {
+          font-size: 2.5em;
+        } 
+      }
+
+      @media (max-width: 1300px){
+        tbody>tr{
+          font-family: 微軟正黑體;
+          height:100px;
+          font-size: 1.2em;
+        }
+        thead{
+          font-family: 微軟正黑體;
+          font-size: 1.3em;
+          letter-spacing: 10px;
+        }
+        .dropdownMenuButton{
+          width: 85px;
+        }
+      }
+
+      @media (max-width: 380px){
+        #h2o {
+          font-size: 1.5em;
+        } 
+
+        #tablet1{
+          width: 85px;
+        }
+
+        #tablet2{
+          width: 88px;
+        }
+
+        #mapid{
+          height: 300px;
+          width: 300px;
+        }
+
+        #chart{
+          width: 300px;
+          height: 250px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 下拉主選單 -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light position-fixed fixed-top">
+        <a class="navbar-brand" href="./ho.html">
+          <img src="./logo.png"></img>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./ho.html">首頁<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                水的產生及保存
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="#">降雨</a>
+                <a class="dropdown-item" href="./waterpool.html">水庫</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./wateruse.html">水的使用</a>
+            </li>
+            <li class="nav-item dropdown nav-item active">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                水的淨化及監測
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="./dirtywater.html">汙水處理廠</a>
+                <a class="dropdown-item" href="./environment.html">環境水體監測站</a>
+                <a class="dropdown-item" href="#">地下水監測站</a>
+                <a class="dropdown-item" href="#">淨水廠</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">水資源法規</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./watercycle.html">水的永續</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./sdg.html">SDG專區</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./download.html">資料下載區</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./contact.html">聯絡我們</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="none"></div>
+
+
+      <!-- 背景圖 -->
+      <div class="jumbotron jumbotron-fluid" id="background">
+        <div class="container">
+          <div class="row" style="margin:0 15px 0 15px">
+
+            <div class="col-6">
+              <span class="badge badge-secondary  animated infinite flash" id="h2o" style="animation-duration: 2s;animation-iteration-count:1">H20水平台</span>
+            </div>
+
+
+            <!-- 幻燈片 -->
+            <div class="col-6">
+              <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                  <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="./homepic.png" class="d-block w-100" alt="...">                    
+                  </div>
+                  <div class="carousel-item">
+                    <img src="./homepic2.png" class="d-block w-100" alt="...">    
+                  </div>
+                  <div class="carousel-item">
+                    <img src="./homepic3.png" class="d-block w-100" alt="...">
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </div>
+          </div>                    
+        </div>
+      </div>
+
+
+      <!-- 標題 -->
+
+      <div class="row" style="margin:0 15px 0 15px">
+        <div class="col-12 col-xl-12 text-center">
+          <span class="badge badge-pill badge-info animated infinite fadeInUp text-center" id="title" style="animation-duration: 1s;animation-iteration-count:1">汙水處理廠
+          </span>
+        </div>
+      </div>
+
+
+      <!-- 地圖 & 汙水處理站資訊 -->
+
+      <div class="container">
+        <div class="row justify-content-center align-items-center" style="margin: 5% 0 5% 0;">          
+          <div class="col-xl-5 col-12 text-center">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+            <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" 
+              integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+              <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" 
+              integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+              <div id="mapid"></div>
+              <script>
+                var mymap = L.map('mapid').setView([22.712786, 120.342959], 9);     
+                //L 是 Leaflet 套件，新增了一個 map 放在 id 為 mymap 的元素上，初始緯度在 22.712786, 經度在 120.342959,9 則是縮放程度。 
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                  maxZoom: 18, 
+                  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                  '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                  'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                  id: 'mapbox.streets'
+                //載入 OSM 的地圖圖層，否則地圖會是空白的。透過 L.tileLayer 載入 OpenStreetMap 提供的地圖圖層並加到 map 上，即可顯示地圖。
+                }).addTo(mymap);
+
+                var marker = L.marker([22.586334, 120.287168]).addTo(mymap); //加一個地標
+                marker.bindPopup("<strong>中區污水處理廠</strong>"); //點選後跳出視窗
+                var marker1 = L.marker([22.598869, 120.351317]).addTo(mymap); 
+                marker1.bindPopup("<strong>鳳山溪污水處理廠</strong>"); 
+                var marker2 = L.marker([22.686997, 120.434006]).addTo(mymap);
+                marker2.bindPopup("<strong>大樹污水處理廠</strong>");
+                var marker3 = L.marker([22.728425, 120.269288]).addTo(mymap);
+                marker3.bindPopup("<strong>楠梓污水處理廠</strong>");
+                var marker4 = L.marker([22.879226, 120.496331]).addTo(mymap);
+                marker4.bindPopup("<strong>旗美污水處理廠</strong>");
+
+              </script>
+          </div>
+
+          <div class="col-xl-7 col-12 text-center">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col" id="tablet1">廠名</th>
+                  <th scope="col">平均噸數</th>
+                  <th scope="col" id="tablet2">處理等級</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td id="n1"></td>
+                  <td id="xl1"></td>
+                  <td id="lev1"></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td id="n2"></td>
+                  <td id="xl2"></td>
+                  <td id="lev2"></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td id="n3"></td>
+                  <td id="xl3"></td>
+                  <td id="lev3"></td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td id="n4"></td>
+                  <td id="xl4"></td>
+                  <td id="lev4"></td>
+                </tr>
+                <tr>
+                  <th scope="row">5</th>
+                  <td id="n5"></td>
+                  <td id="xl5"></td>
+                  <td id="lev5"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+          <!-- 名詞解釋-處理等級 -->
+
+          <div class="col-xl-12 col-12 text-center">
+            <div style="font-size: 1.8em; color: #886600; font-weight: 600; letter-spacing: 10px; margin-top: 5%;">名詞解釋-處理等級</div>
+            <hr style="width: 50%;">  
+          </div>  
+
+          <div class="col-xl-8 col-12 text-center">
+            <p>
+              <div style="margin-bottom: 3%;">※ 點擊以下按鈕了解更多資訊 ※</div>
+              <span class="row">
+                <span class="col-4">
+                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="font-size: 1.2em;">
+                    第一級 ( 初級 ) 處理
+                  </button>
+                </span>
+                <span class="col-4">
+                  <button class="btn btn-primary second" id="process2" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                    第二級處理
+                  </button>
+                </span>
+                <span class="col-4">
+                  <button class="btn btn-primary third" id="process3" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                    第三級處理
+                  </button>
+                </span>
+              </span>
+              
+              
+              
+            </p>
+
+            <div class="row">
+              <div class="col-xl-4">
+                <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+                    <div class="card-text">
+                      <div style="font-size: 1.2em; font-weight: 1000; letter-spacing: 5px; color: ">第一級<br>( 初級 )<br>處理</div><br>去除污水中呈懸浮狀況的<b style="color: red;">固體污染物質</b>，物理處理法大部分只能完結一級處理的要求。<br>通過一級處理的污水，生化需氧量 (BOD) 一般可去除30%左右，但仍達不到排放規範。
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="collapse" id="collapseExample2">
+                  <div class="card card-body">
+                    <div class="card-text">
+                      <span style="font-size: 1.2em; font-weight: 1000; letter-spacing: 5px; color: ">第二級處理</span><br>去除污水中呈膠體和溶解狀況的<span style="color: red; font-weight: 600;">有機污染物質</span><br> - 1. 生化需氧量( BOD )<br>2. 化學需氧量( COD )，去除率可達90%以上，使有機污染物到達排放規範。
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="collapse" id="collapseExample3">
+                  <div class="card card-body">
+                    <div class="card-text">
+                      <div style="font-size: 1.2em; font-weight: 1000; letter-spacing: 5px; color: ">第三級處理</div><br>進一步處理難降解的有機物、氮和磷等可以導致水體富營養化的<b style="color: red;">可溶性無機物</b>等。<br>首要辦法有 :<br>
+                      生物脫氮除磷法、混凝沉澱法、砂濾法、活性炭吸附法、離子交換法，和電滲分析法等
+                      <!-- <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-html="true" title="生物脫氮過程可分為三步 :<br>1.氨化作用 : 有機氮 => 氨氮<br>2.硝化作用 : 氨氮 => 亞硝酸鹽 => 硝酸鹽<br>3.反硝化作用 ( 創造一個缺氧或厭氧的環境 ) : 亞硝酸鹽、硝酸鹽 => 氮氣" id="tip1">
+                        <div style="pointer-events: none;" id="annotation1">生物脫氮除磷法</div>
+                      </span>、
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="hi" id="tip2">
+                        <div style="pointer-events: none;" id="annotation2">混凝沉澱法</div>
+                      </span>、
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="hi" id="tip3">
+                        <div style="pointer-events: none;" id="annotation3">砂濾法</div>
+                      </span>、
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="hi" id="tip4">
+                        <div style="pointer-events: none;" id="annotation4">活性炭吸附法</div>
+                      </span>、
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="hi" id="tip5">
+                        <div style="pointer-events: none;" id="annotation5">離子交換法</div>
+                      </span>，和
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="hi" id="tip6">
+                        <div style="pointer-events: none;" id="annotation6">電滲分析法</div>
+                      </span>等。 -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>    
+          </div> 
+
+          <div class="col-xl-4 col-12 text-center">
+            <div class="col-md-4 col-xl-12">
+              <img src="./汙水處理階層.png" class="card-img one" alt="...">
+            </div>
+          </div> 
+
+          <div class="col-xl-12 col-12 text-center">
+            <div style="font-size: 1.8em; color: #886600; font-weight: 600; letter-spacing: 10px; margin-top: 5%;">相關資料查詢</div>
+            <hr style="width: 50%;">  
+          </div>  
+
+          <div class="col-xl-12">
+            <div class="row">
+              <div class="col-xl-5 col-12">
+
+                  <div class="row text-center" style="margin-bottom: 3%;">
+                     <div class="col-xl-5 col-4"></div>
+                     <div class="col-xl-4 col-4" style="letter-spacing: 3px; font-weight: 600; color: #00008B;">同年各月資料<br>(單位:月)</div> 
+                     <div class="col-xl-3 col-4" style="letter-spacing: 3px; font-weight: 600; color: #00008B;">多年比較資料<br>(單位:年)</div>
+                  </div> 
+
+                  <div class="row text-center justify-content-center align-items-center">
+                    <div class="col-xl-5 col-4">
+                      <div class="alert alert-primary" role="alert" style="background-color: wheat;">
+                        公共污水下水道<br>普及率  
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-4">
+                      <div class="btn-group dropright">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          選擇年分
+                        </button>
+                        <div class="dropdown-menu">
+                          <button  class="dropdown-item" id="p1" onclick="monthchart('dw108.json','public')">108</button>
+                          <button  class="dropdown-item" id="p2" onclick="monthchart('dw107.json','public')">107</button>
+                          <button  class="dropdown-item" id="p3" onclick="monthchart('dw106.json','public')">106</button>
+                          <button  class="dropdown-item" id="p4" onclick="monthchart('dw105.json','public')">105</button>
+                          <button  class="dropdown-item" id="p5" onclick="monthchart('dw104.json','public')">104</button>
+                          <!-- <button  class="dropdown-item" id="p6">103</button> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-4">
+                      <button type="button" class="btn btn-dark" id="publicyear" onclick="yearchart('dwayear.json','pyear')">查詢</button>                
+                    </div>
+                  </div>
+
+                  <div class="row text-center justify-content-center align-items-center">
+                    <div class="col-xl-5 col-4">
+                      <div class="alert alert-primary" role="alert" style="background-color: plum;">
+                      專用污水下水道普及率
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-4">                   
+                      <div class="btn-group dropright">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          選擇年分
+                        </button>
+                        <div class="dropdown-menu">
+                          <button  class="dropdown-item" id="s1" onclick="monthchart('dw108.json','special')">108</button>
+                          <button  class="dropdown-item" id="s2" onclick="monthchart('dw107.json','special')">107</button>
+                          <button  class="dropdown-item" id="s3" onclick="monthchart('dw106.json','special')">106</button>
+                          <button  class="dropdown-item" id="s4" onclick="monthchart('dw105.json','special')">105</button>
+                          <button  class="dropdown-item" id="s5" onclick="monthchart('dw104.json','special')">104</button>
+                          <!-- <button  class="dropdown-item" id="s6">103</button> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-4">
+                      <button type="button" class="btn btn-dark" id="specialyear" onclick="yearchart('dwayear.json','syear')">查詢</button>                
+                    </div>
+                  </div>
+                    
+                  <div class="row text-center justify-content-center align-items-center">
+                    <div class="col-xl-5 col-4">
+                      <div class="alert alert-primary" role="alert" style="background-color: paleturquoise;">
+                      建築物污水設施設置率
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-4">
+                      <div class="btn-group dropright">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          選擇年分
+                        </button>
+                        <div class="dropdown-menu">
+                          <button  class="dropdown-item" id="b1" onclick="monthchart('dw108.json','building')">108</button>
+                          <button  class="dropdown-item" id="b2" onclick="monthchart('dw107.json','building')">107</button>
+                          <button  class="dropdown-item" id="b3" onclick="monthchart('dw106.json','building')">106</button>
+                          <button  class="dropdown-item" id="b4" onclick="monthchart('dw105.json','building')">105</button>
+                          <button  class="dropdown-item" id="b5" onclick="monthchart('dw104.json','building')">104</button>
+                          <!-- <button  class="dropdown-item" id="b6">103</button> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-4">
+                      <button type="button" class="btn btn-dark" id="buildingyear" onclick="yearchart('dwayear.json','byear')">查詢</button>                
+                    </div>
+                  </div>
+                
+                  <div class="row text-center justify-content-center align-items-center">
+                    <div class="col-xl-5 col-4">
+                      <div class="alert alert-primary" role="alert" style="background-color: aquamarine;">
+                      整體污水處理率合計
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-4">
+                      <div class="btn-group dropright">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          選擇年分
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <button  class="dropdown-item" id="t1" onclick="monthchart('dw108.json','total')">108</button>
+                          <button  class="dropdown-item" id="t2" onclick="monthchart('dw107.json','total')">107</button>
+                          <button  class="dropdown-item" id="t3" onclick="monthchart('dw106.json','total')">106</button>
+                          <button  class="dropdown-item" id="t4" onclick="monthchart('dw105.json','total')">105</button>
+                          <button  class="dropdown-item" id="t5" onclick="monthchart('dw104.json','total')">104</button>
+                          <!-- <button  class="dropdown-item" id="t6">103</button> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-4">
+                      <button type="button" class="btn btn-dark" id="totalyear" onclick="yearchart('dwayear.json','tyear')">查詢</button>             
+                    </div>
+                  </div> 
+
+                  <div class="row text-center justify-content-center align-items-center">
+                    <div class="col-xl-5 col-4">
+                      <div class="alert alert-primary" role="alert" style="background-color: lightpink; margin-bottom:0;">
+                      綜合圖表
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-4">
+                      <div class="btn-group dropright">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          選擇年分
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <button  class="dropdown-item" id="m1" onclick="monthchart('dw108.json','mix')">108</button>
+                          <button  class="dropdown-item" id="m2" onclick="monthchart('dw107.json','mix')">107</button>
+                          <button  class="dropdown-item" id="m3" onclick="monthchart('dw106.json','mix')">106</button>
+                          <button  class="dropdown-item" id="m4" onclick="monthchart('dw105.json','mix')">105</button>
+                          <button  class="dropdown-item" id="m5" onclick="monthchart('dw104.json','mix')">104</button>
+                          <!-- <button  class="dropdown-item" id="m6">103</button> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-4">
+                      <button type="button" class="btn btn-dark" id="mixyear" onclick="yearchart('dwayear.json','myear')">查詢</button>           
+                    </div>
+                  </div> 
+                </div>              
+              
+                <div class="col-xl-7 col-12 text-center" id="chartreport">
+                  
+                  <canvas id="chart"></canvas>
+                  
+                  
+                  <div class="card-text">※ 註 : <br><!-- <b style="color: #E63F00;">民國103年9月之前</b>普及率處理率以 <br><b style="color: #E63F00;">( 各縣市接管戶數 ÷ ( 各縣市戶政資料總人口 ÷ 假設每戶四人 ) )</b> 而得。<br> --><b style="color: #00AA00;">民國103年9月之後</b>普及率處理率以 <b style="color: #00AA00;">( 接管戶數 × 各縣市戶量 ÷ 各縣市總人口數 )</b> 而得。</div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

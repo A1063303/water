@@ -1,0 +1,31 @@
+[{
+    "publicavg": 42.89,
+    "specialavg": 6.25,
+    "buildingavg": 16.43,
+    "totalavg": 65.58,
+    "year": 104
+},{
+    "publicavg": 45.59,
+    "specialavg": 6.47,
+    "buildingavg": 16.34,
+    "totalavg": 68.39,
+    "year": 105
+},{
+    "publicavg": 48.4,
+    "specialavg": 6.55,
+    "buildingavg": 16.52,
+    "totalavg": 71.47,
+    "year": 106
+},{
+    "publicavg": 50.33,
+    "specialavg": 6.55,
+    "buildingavg": 16.65,
+    "totalavg": 73.54,
+    "year": 107
+},{
+    "publicavg": 52.47,
+    "specialavg": 6.53,
+    "buildingavg": 16.8,
+    "totalavg": 75.8,
+    "year": 108
+}]

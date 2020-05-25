@@ -1,0 +1,25 @@
+[{
+    "public": "34.27",
+    "special": "4.99",
+    "building": "13.95",
+    "total": "53.22",
+    "date": "9月"
+},{
+    "public": "34.35",
+    "special": "5.07",
+    "building": "13.93",
+    "total": "53.35",
+    "date": "10月"
+},{
+    "public": "34.38",
+    "special": "5.07",
+    "building": "13.92",
+    "total": "53.37",
+    "date": "11月"
+},{
+    "public": "34.51",
+    "special": "5.09",
+    "building": "13.86",
+    "total": "53.47",
+    "date": "12月"
+}]
